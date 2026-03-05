@@ -1,0 +1,83 @@
+{
+  "devices": [
+    {
+      "id": "esp_pedana_1",
+      "ip": "localhost",
+      "port": 8001,
+      "schema": [
+        { "name": "pedana_premuta", "type": "binary" }
+      ]
+    },
+    {
+      "id": "esp_pedana_2",
+      "ip": "localhost",
+      "port": 8002,
+      "schema": [
+        { "name": "pedana_premuta", "type": "binary" }
+      ]
+    },
+    {
+      "id": "esp_pedana_3",
+      "ip": "localhost",
+      "port": 8003,
+      "schema": [
+        { "name": "pedana_premuta", "type": "binary" }
+      ]
+    },
+    {
+      "id": "esp_pedana_4",
+      "ip": "localhost",
+      "port": 8004,
+      "schema": [
+        { "name": "pedana_premuta", "type": "binary" }
+      ]
+    },
+    {
+      "id": "rasp_tornio",
+      "ip": "localhost",
+      "port": 8005,
+      "schema": [
+        { "name": "analog1", "type": "float" },
+        { "name": "analog2", "type": "float" }
+      ]
+    },
+    {
+      "id": "rasp_trapano",
+      "ip": "localhost",
+      "port": 8006,
+      "schema": [
+        { "name": "analog1", "type": "float" },
+        { "name": "analog2", "type": "float" },
+        { "name": "analog3", "type": "float" }
+      ]
+    },
+    {
+      "id": "rasp_assemblaggio",
+      "ip": "localhost",
+      "port": 8007,
+      "schema": [
+        { "name": "analog1", "type": "float" },
+        { "name": "analog2", "type": "float" },
+        { "name": "analog3", "type": "float" },
+        { "name": "analog4", "type": "float" }
+      ]
+    },
+    {
+      "id": "rasp_pressione",
+      "ip": "localhost",
+      "port": 8008,
+      "schema": [
+        { "name": "analog1", "type": "float" },
+        { "name": "analog2", "type": "float" }
+      ]
+    },
+    {
+      "id": "robot",
+      "ip": "localhost",
+      "port": 8009,
+      "schema": [
+        { "name": "value", "type": "int" }
+      ]
+    }
+  ]
+}
