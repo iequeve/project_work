@@ -40,7 +40,8 @@ class DeviceSimulator:
                     data = self._make_payload()
                     await websocket.send(json.dumps(data))
                     print(f"[SENT] {self.config.id}: {data}")
-                    await asyncio.sleep(10)
+                    delay = random.uniform(10, 20)
+                    await asyncio.sleep(delay)
         except ConnectionRefusedError:
             print(f"[ERROR] {self.config.id}: Impossibile connettersi a {uri}")
         except websockets.exceptions.ConnectionClosed:
@@ -62,4 +63,5 @@ async def main():
 
 
 if __name__ == "__main__":
+
     asyncio.run(main())
