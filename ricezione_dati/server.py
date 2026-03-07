@@ -7,7 +7,7 @@ from .devices import load_configs, DeviceConfig
 
 class DeviceServer:
 
-    def __init__(self, config: DeviceConfig):
+    def __init__(self, config):
         self.config = config
 
     async def handle(self, websocket):
@@ -42,9 +42,16 @@ class DeviceServer:
 # prende i dispositivi da devices.py e avvia un server per ognuno
 async def start_all_servers():
     configs = load_configs()
-    servers = [DeviceServer(cfg) for cfg in configs]
+    servers = []
+    for cfg in configs:
+        server = DeviceServer(cfg)
+        servers.append(server)
 
     print("\n\n\n")
     print(f"Avvio {len(servers)} server\n")
 
-    await asyncio.gather(*(srv.run() for srv in servers))
+    tasks = []
+    for srv in servers:
+        task = srv.run()
+        tasks.append(task)
+    await asyncio.gather(*tasks)

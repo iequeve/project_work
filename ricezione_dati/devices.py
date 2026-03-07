@@ -2,16 +2,14 @@ import json
 import os
 
 class DeviceConfig:
-    # carica json dei dispositivi e restituisce info
-    def __init__(self, device_id: str, ip: str, port: int, schema: list):
+    def __init__(self, device_id, ip, port, schema):
         self.id = device_id
         self.ip = ip
         self.port = port
         self.schema = schema
 
-    @classmethod
-    def from_dict(cls, data: dict):
-        return cls(
+    def from_dict(data):
+        return DeviceConfig(
             device_id=data['id'],
             ip=data['ip'],
             port=data['port'],
@@ -22,6 +20,10 @@ class DeviceConfig:
 def load_configs(config_path=None):
     if config_path is None:
         config_path = os.path.join(os.path.dirname(__file__), 'devices.json')
-    with open(config_path, 'r') as f:
-        raw = json.load(f)
-    return [DeviceConfig.from_dict(d) for d in raw.get('devices', [])]
+    with open(config_path, 'r') as file:
+        raw_data = json.load(file)
+    device_list = []
+    for device_data in raw_data.get('devices', []):
+        device_config = DeviceConfig.from_dict(device_data)
+        device_list.append(device_config)
+    return device_list
