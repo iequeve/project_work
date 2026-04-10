@@ -1,0 +1,691 @@
+
+<style>
+:root {
+  --bg:#0a0c10; --panel:#141820; --panel2:#0e1117;
+  --border:rgba(255,255,255,0.07);
+  --c1:#00e5ff; --c2:#ff6b35; --c3:#39ff14; --c4:#ffcc00; --c5:#b06aff; --danger:#ff2d55;
+  --muted:rgba(255,255,255,0.35); --text:#c8d6e5;
+  --mono:'Share Tech Mono',monospace; --cond:'Barlow Condensed',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;}
+button{cursor:pointer;font:inherit;color:inherit;background:none;border:none;}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--panel2);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;}
+.logo-row{display:flex;align-items:center;gap:12px;}
+.logo-sq{width:26px;height:26px;border:1.5px solid var(--c1);position:relative;flex-shrink:0;}
+.logo-sq::after{content:'';position:absolute;inset:5px;background:var(--c1);animation:lp 2s ease-in-out infinite;}
+@keyframes lp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.5)}}
+.logo-title{font-family:var(--cond);font-size:18px;font-weight:900;color:#fff;letter-spacing:3px;}
+.logo-sub{font-size:10px;color:var(--muted);letter-spacing:.5px;}
+.top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.chip{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:20px;border:1px solid;display:flex;align-items:center;gap:5px;}
+.chip.run{border-color:var(--c3);color:var(--c3);}
+.chip.stop{border-color:var(--danger);color:var(--danger);}
+.chip.warn{border-color:var(--c4);color:var(--c4);}
+.blink{width:6px;height:6px;border-radius:50%;background:currentColor;animation:bl 1s ease-in-out infinite;}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.2}}
+.clock{font-family:var(--mono);font-size:13px;color:var(--c1);}
+
+.ctrl-bar{display:flex;align-items:center;gap:10px;padding:8px 20px;background:#080a0d;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.btn-s{font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:2px;padding:7px 20px;border-radius:4px;transition:all .15s;}
+.btn-stop{background:rgba(255,45,85,.1);color:var(--danger);border:1px solid var(--danger);}
+.btn-stop:hover{background:var(--danger);color:#fff;}
+.btn-go{background:rgba(57,255,20,.08);color:var(--c3);border:1px solid var(--c3);}
+.btn-go:hover{background:var(--c3);color:#000;}
+.flow-info{font-family:var(--mono);font-size:11px;margin-left:auto;display:flex;align-items:center;gap:8px;}
+
+.kpi-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;background:var(--border);}
+.kpi{background:var(--panel);padding:14px 16px;}
+.kpi-label{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.kpi-val{font-family:var(--cond);font-size:34px;font-weight:900;color:#fff;line-height:1;}
+.kpi-sub{font-size:10px;margin-top:3px;}
+
+.machines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--border);}
+.machine{background:var(--panel);padding:18px;}
+.mach-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.mach-name{font-family:var(--cond);font-size:16px;font-weight:900;color:#fff;letter-spacing:2px;display:flex;align-items:center;gap:10px;}
+.mach-dot{width:8px;height:8px;border-radius:50%;}
+.mach-dot.run{background:var(--c3);box-shadow:0 0 8px var(--c3);}
+.mach-dot.stop{background:var(--danger);}
+.mach-dot.warn{background:var(--c4);animation:bl 1s ease-in-out infinite;}
+
+.vars-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.var-row{background:#0a0c10;border-radius:6px;padding:10px 12px;border-left:2px solid var(--border);}
+.var-row.alert{border-left-color:var(--danger);}
+.var-row.warn{border-left-color:var(--c4);}
+.var-row.ok{border-left-color:var(--c3);}
+.var-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-family:var(--mono);}
+.var-val{font-family:var(--mono);font-size:16px;color:#fff;font-weight:600;}
+.var-unit{font-size:10px;color:var(--muted);margin-left:3px;}
+.var-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:6px;overflow:hidden;}
+.var-fill{height:100%;border-radius:2px;transition:width 1s ease;}
+
+.section-full{grid-column:1/-1;}
+.stazione{background:var(--panel);padding:18px;}
+.stato-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px;}
+.stato-item{background:#0a0c10;border-radius:6px;padding:10px 12px;text-align:center;}
+.stato-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-family:var(--mono);margin-bottom:6px;}
+.stato-badge{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;border:1px solid;letter-spacing:.5px;}
+.stato-badge.ok{border-color:var(--c3);color:var(--c3);background:rgba(57,255,20,.08);}
+.stato-badge.stop{border-color:var(--danger);color:var(--danger);background:rgba(255,45,85,.08);}
+.stato-badge.warn{border-color:var(--c4);color:var(--c4);background:rgba(255,204,0,.08);}
+.stato-badge.run{border-color:var(--c1);color:var(--c1);background:rgba(0,229,255,.08);}
+.stato-badge.idle{border-color:var(--muted);color:var(--muted);background:rgba(255,255,255,.04);}
+
+.log-strip{background:var(--panel2);padding:8px 20px;border-top:1px solid var(--border);display:flex;gap:12px;overflow-x:auto;}
+.log-entry-s{font-family:var(--mono);font-size:10px;flex-shrink:0;display:flex;gap:6px;align-items:center;}
+.log-entry-s.info{color:var(--c1);}
+.log-entry-s.ok{color:var(--c3);}
+.log-entry-s.warn{color:var(--c4);}
+.log-entry-s.err{color:var(--danger);}
+.log-time-s{opacity:.4;}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">SMART2026 dashboard — simulazione live di 5 macchine: trapano, tornio, banco rotore, banco compressore, stazione principale</h2>
+
+<div class="top-bar">
+  <div class="logo-row">
+    <div class="logo-sq"></div>
+    <div>
+      <div class="logo-title">SMART2026</div>
+      <div class="logo-sub">ITS Academy Udine · Smart Automation</div>
+    </div>
+  </div>
+  <div class="top-right">
+    <div class="chip run" id="sysChip"><div class="blink"></div>SISTEMA ONLINE</div>
+    <div class="chip warn">SIMULAZIONE LIVE</div>
+    <div class="clock" id="clk">--:--:--</div>
+  </div>
+</div>
+
+<div class="ctrl-bar">
+  <button class="btn-s btn-stop" onclick="stopAll()">STOP COMPLETO</button>
+  <button class="btn-s btn-go"   onclick="startAll()">AVVIA TUTTO</button>
+  <button class="btn-s" style="border:1px solid var(--c4);color:var(--c4);border-radius:4px;font-family:var(--cond);font-weight:700;font-size:12px;letter-spacing:2px;padding:7px 20px;" onclick="stopExceptTrapano()">STOP (tranne trapano)</button>
+  <div class="flow-info">
+    <div class="blink" id="flowDot" style="color:var(--c3)"></div>
+    <span id="flowLbl" style="font-family:var(--mono);font-size:11px;">PRODUZIONE IN CORSO</span>
+    <span style="color:var(--muted);font-family:var(--mono);font-size:11px;margin-left:10px;">ciclo #<span id="cycleN">47</span></span>
+  </div>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-label">Pezzi completati</div><div class="kpi-val" id="k1">47</div><div class="kpi-sub" style="color:var(--c1)">sessione attiva</div></div>
+  <div class="kpi"><div class="kpi-label">Scarti</div><div class="kpi-val" id="k2" style="color:var(--danger)">4</div><div class="kpi-sub" style="color:var(--danger)" id="k2r">7.8%</div></div>
+  <div class="kpi"><div class="kpi-label">Anomalie attive</div><div class="kpi-val" id="k3" style="color:var(--c4)">2</div><div class="kpi-sub" style="color:var(--c4)">su 5 macchine</div></div>
+  <div class="kpi"><div class="kpi-label">Potenza rotore</div><div class="kpi-val" id="k4" style="color:var(--c5)">—</div><div class="kpi-sub" style="color:var(--c5)">kW calcolata</div></div>
+  <div class="kpi"><div class="kpi-label">Pressione linea</div><div class="kpi-val" id="k5" style="color:var(--c2)">—</div><div class="kpi-sub" style="color:var(--c2)">bar compressore</div></div>
+  <div class="kpi"><div class="kpi-label">Uptime</div><div class="kpi-val" id="k6" style="color:var(--c3);font-size:24px">02:41</div><div class="kpi-sub" style="color:var(--c3)">hh:mm sessione</div></div>
+</div>
+
+<div class="machines">
+
+  <!-- TRAPANO -->
+  <div class="machine" id="m-trapano">
+    <div class="mach-head">
+      <div class="mach-name"><div class="mach-dot run" id="dot-trapano"></div>TRAPANO</div>
+      <div class="chip run" id="badge-trapano"><div class="blink"></div>IN FUNZIONE</div>
+    </div>
+    <div class="vars-grid">
+      <div class="var-row ok" id="vr-trap-op">
+        <div class="var-label">Presenza operatore</div>
+        <div class="var-val" id="v-trap-op">1<span class="var-unit">presente</span></div>
+      </div>
+      <div class="var-row ok" id="vr-trap-rpm">
+        <div class="var-label">Giri / min calcolati</div>
+        <div class="var-val" id="v-trap-rpm">—<span class="var-unit">RPM</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-trap-rpm" style="background:var(--c1)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-trap-amp">
+        <div class="var-label">Assorbimento elettrico</div>
+        <div class="var-val" id="v-trap-amp">—<span class="var-unit">A</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-trap-amp" style="background:var(--c2)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-trap-stato">
+        <div class="var-label">Stato</div>
+        <div class="var-val" id="v-trap-stato">1<span class="var-unit">attivo</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TORNIO -->
+  <div class="machine" id="m-tornio">
+    <div class="mach-head">
+      <div class="mach-name"><div class="mach-dot run" id="dot-tornio"></div>TORNIO</div>
+      <div class="chip run" id="badge-tornio"><div class="blink"></div>IN FUNZIONE</div>
+    </div>
+    <div class="vars-grid">
+      <div class="var-row ok" id="vr-torn-temp">
+        <div class="var-label">Temperatura</div>
+        <div class="var-val" id="v-torn-temp">—<span class="var-unit">°C</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-torn-temp" style="background:var(--c4)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-torn-vib">
+        <div class="var-label">Vibrazione</div>
+        <div class="var-val" id="v-torn-vib">—<span class="var-unit">g</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-torn-vib" style="background:var(--c3)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-torn-rpm">
+        <div class="var-label">Giri / min</div>
+        <div class="var-val" id="v-torn-rpm">—<span class="var-unit">RPM</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-torn-rpm" style="background:var(--c1)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-torn-stato">
+        <div class="var-label">Stato</div>
+        <div class="var-val" id="v-torn-stato">1<span class="var-unit">attivo</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANCO ROTORE -->
+  <div class="machine" id="m-rotore">
+    <div class="mach-head">
+      <div class="mach-name"><div class="mach-dot run" id="dot-rotore"></div>BANCO ROTORE</div>
+      <div class="chip run" id="badge-rotore"><div class="blink"></div>IN FUNZIONE</div>
+    </div>
+    <div class="vars-grid">
+      <div class="var-row ok" id="vr-rot-rpm">
+        <div class="var-label">Giri / min</div>
+        <div class="var-val" id="v-rot-rpm">—<span class="var-unit">RPM</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rot-rpm" style="background:var(--c5)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-rot-v">
+        <div class="var-label">Tensione</div>
+        <div class="var-val" id="v-rot-v">—<span class="var-unit">V</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rot-v" style="background:var(--c1)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-rot-i">
+        <div class="var-label">Corrente</div>
+        <div class="var-val" id="v-rot-i">—<span class="var-unit">A</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rot-i" style="background:var(--c2)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-rot-coppia">
+        <div class="var-label">Coppia azionamento</div>
+        <div class="var-val" id="v-rot-coppia">—<span class="var-unit">N·m</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rot-coppia" style="background:var(--c4)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-rot-vel">
+        <div class="var-label">Velocità angolare</div>
+        <div class="var-val" id="v-rot-vel">—<span class="var-unit">rad/s</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rot-vel" style="background:var(--c5)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-rot-pow">
+        <div class="var-label">Potenza calcolata</div>
+        <div class="var-val" id="v-rot-pow" style="color:var(--c5)">—<span class="var-unit">kW</span></div>
+      </div>
+      <div class="var-row ok" id="vr-rot-ax">
+        <div class="var-label">Accel. asse X</div>
+        <div class="var-val" id="v-rot-ax">—<span class="var-unit">m/s²</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rot-ax" style="background:var(--c3)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-rot-ay">
+        <div class="var-label">Accel. asse Y</div>
+        <div class="var-val" id="v-rot-ay">—<span class="var-unit">m/s²</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rot-ay" style="background:var(--c3)"></div></div>
+      </div>
+    </div>
+    <div style="margin-top:8px;">
+      <div class="var-row ok" id="vr-rot-az">
+        <div class="var-label">Accel. asse Z</div>
+        <div class="var-val" id="v-rot-az">—<span class="var-unit">m/s²</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rot-az" style="background:var(--c3)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANCO COMPRESSORE -->
+  <div class="machine" id="m-comp">
+    <div class="mach-head">
+      <div class="mach-name"><div class="mach-dot run" id="dot-comp"></div>BANCO COMPRESSORE</div>
+      <div class="chip run" id="badge-comp"><div class="blink"></div>IN FUNZIONE</div>
+    </div>
+    <div class="vars-grid">
+      <div class="var-row ok" id="vr-comp-p">
+        <div class="var-label">Pressione in linea</div>
+        <div class="var-val" id="v-comp-p">—<span class="var-unit">bar</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-comp-p" style="background:var(--c2)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-comp-tf">
+        <div class="var-label">Temp. flussometro</div>
+        <div class="var-val" id="v-comp-tf">—<span class="var-unit">°C</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-comp-tf" style="background:var(--c4)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-comp-t">
+        <div class="var-label">Temperatura</div>
+        <div class="var-val" id="v-comp-t">—<span class="var-unit">°C</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-comp-t" style="background:var(--c4)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-comp-f">
+        <div class="var-label">Flusso</div>
+        <div class="var-val" id="v-comp-f">—<span class="var-unit">m³/h</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-comp-f" style="background:var(--c1)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-comp-ia">
+        <div class="var-label">Assorbimento</div>
+        <div class="var-val" id="v-comp-ia">—<span class="var-unit">A</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-comp-ia" style="background:var(--c2)"></div></div>
+      </div>
+      <div class="var-row ok" id="vr-comp-stato">
+        <div class="var-label">Stato</div>
+        <div class="var-val" id="v-comp-stato">1<span class="var-unit">attivo</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROBOT / ROVER + STAZIONE PRINCIPALE full width -->
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--border);">
+
+  <!-- ROBOT ROVER -->
+  <div class="machine" id="m-robot">
+    <div class="mach-head">
+      <div class="mach-name"><div class="mach-dot run" id="dot-robot"></div>ROBOT ROVER</div>
+      <div class="chip run" id="badge-robot"><div class="blink"></div>IN TRANSITO</div>
+    </div>
+    <div class="vars-grid">
+      <div class="var-row ok">
+        <div class="var-label">Stato</div>
+        <div class="var-val" id="v-rob-stato">IN TRANSITO<span class="var-unit"></span></div>
+      </div>
+      <div class="var-row ok">
+        <div class="var-label">Destinazione</div>
+        <div class="var-val" id="v-rob-dest" style="font-size:13px">CQ PRESSIONE</div>
+      </div>
+      <div class="var-row ok">
+        <div class="var-label">Carico</div>
+        <div class="var-val" id="v-rob-load">1<span class="var-unit">pezzo</span></div>
+      </div>
+      <div class="var-row ok">
+        <div class="var-label">Missioni completate</div>
+        <div class="var-val" id="v-rob-miss">23<span class="var-unit"></span></div>
+      </div>
+      <div class="var-row ok">
+        <div class="var-label">Velocità</div>
+        <div class="var-val" id="v-rob-vel">—<span class="var-unit">m/s</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rob-vel" style="background:var(--c2)"></div></div>
+      </div>
+      <div class="var-row ok">
+        <div class="var-label">Batteria</div>
+        <div class="var-val" id="v-rob-bat">—<span class="var-unit">%</span></div>
+        <div class="var-bar"><div class="var-fill" id="b-rob-bat" style="background:var(--c3)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAZIONE PRINCIPALE -->
+  <div class="machine" id="m-staz" style="background:var(--panel2);">
+    <div class="mach-head">
+      <div class="mach-name"><div class="mach-dot run" id="dot-staz"></div>STAZIONE PRINCIPALE</div>
+      <div class="chip run" id="badge-staz"><div class="blink"></div>OPERATIVA</div>
+    </div>
+    <div class="stato-grid">
+      <div class="stato-item">
+        <div class="stato-label">Sistema</div>
+        <div class="stato-badge ok" id="st-sistema">ONLINE</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">Produzione</div>
+        <div class="stato-badge run" id="st-prod">IN CORSO</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">WiFi</div>
+        <div class="stato-badge ok" id="st-wifi">CONNESSO</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">Emergenza</div>
+        <div class="stato-badge idle" id="st-emrg">INATTIVA</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">Trapano</div>
+        <div class="stato-badge ok" id="st-trapano">OK</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">Tornio</div>
+        <div class="stato-badge ok" id="st-tornio">OK</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">Banco rotore</div>
+        <div class="stato-badge ok" id="st-rotore">OK</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">Compressore</div>
+        <div class="stato-badge ok" id="st-comp">OK</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">Robot rover</div>
+        <div class="stato-badge run" id="st-robot">IN MOTO</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">CQ ottico</div>
+        <div class="stato-badge ok" id="st-cqopt">PASS</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">CQ pressione</div>
+        <div class="stato-badge warn" id="st-cqpres">WAIT</div>
+      </div>
+      <div class="stato-item">
+        <div class="stato-label">Assemblaggio</div>
+        <div class="stato-badge run" id="st-asm">IN CORSO</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOG STRIP -->
+<div class="log-strip" id="logStrip"></div>
+
+<script>
+const S = {
+  running: true,
+  completed: 47, scraps: 4, cycle: 47,
+  startMs: Date.now() - (2*3600+41*60)*1000,
+  trapano: { op:1, rpm:0, amp:0, stato:1 },
+  tornio:  { temp:72, vib:3.2, rpm:0, stato:1 },
+  rotore:  { rpm:0, v:0, i:0, coppia:0, vel:0, ax:0, ay:0, az:0 },
+  comp:    { p:0, tf:0, t:0, flusso:0, ia:0, stato:1 },
+  robot:   { stato:'IN TRANSITO', dest:'CQ PRESS', load:1, miss:23, vel:0, bat:85 },
+  machineOn: { trapano:true, tornio:true, rotore:true, comp:true, robot:true },
+  logs: []
+};
+
+const ROBOT_ROUTE = [
+  {stato:'IN TRANSITO',dest:'CQ PRESSIONE',load:1},
+  {stato:'IN SCARICO',dest:'CQ PRESSIONE',load:1},
+  {stato:'FERMO',dest:'—',load:0},
+  {stato:'IN TRANSITO',dest:'PRELIEVO',load:0},
+  {stato:'IN CARICO',dest:'PRELIEVO',load:1},
+  {stato:'IN TRANSITO',dest:'ASSEMBLAGGIO',load:1},
+];
+let robotIdx=0, robotTick=0;
+
+function rnd(a,b){return a+Math.random()*(b-a);}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+function tick(){
+  const on = S.machineOn;
+  const r  = S.running;
+
+  // TRAPANO (resta sempre vivo anche in stop)
+  S.trapano.rpm  = clamp(S.trapano.rpm  + rnd(-40,50), 200, 1200);
+  S.trapano.amp  = clamp(S.trapano.amp  + rnd(-0.3,0.4), 2, 18);
+  S.trapano.op   = Math.random() < 0.07 ? (S.trapano.op===1?0:1) : S.trapano.op;
+
+  // TORNIO
+  if(on.tornio && r){
+    S.tornio.temp = clamp(S.tornio.temp + rnd(-0.5,0.7), 55, 98);
+    S.tornio.vib  = clamp(S.tornio.vib  + rnd(-0.3,0.4), 1, 12);
+    S.tornio.rpm  = clamp(S.tornio.rpm  + rnd(-30,40), 400, 2400);
+  }
+
+  // BANCO ROTORE
+  if(on.rotore && r){
+    S.rotore.rpm    = clamp(S.rotore.rpm    + rnd(-20,25),  800, 3600);
+    S.rotore.v      = clamp(S.rotore.v      + rnd(-1,1.2),  215, 245);
+    S.rotore.i      = clamp(S.rotore.i      + rnd(-0.4,0.5), 5, 28);
+    S.rotore.coppia = clamp(S.rotore.coppia + rnd(-0.8,1),   8, 65);
+    S.rotore.vel    = parseFloat((S.rotore.rpm * 2 * Math.PI / 60).toFixed(2));
+    S.rotore.ax     = clamp(S.rotore.ax + rnd(-0.04,0.05), -2, 2);
+    S.rotore.ay     = clamp(S.rotore.ay + rnd(-0.04,0.05), -2, 2);
+    S.rotore.az     = clamp(S.rotore.az + rnd(-0.03,0.04), 9, 10.5);
+  }
+
+  // BANCO COMPRESSORE
+  if(on.comp && r){
+    S.comp.p      = clamp(S.comp.p      + rnd(-0.05,0.07), 5.5, 9.0);
+    S.comp.tf     = clamp(S.comp.tf     + rnd(-0.4,0.5),   18, 55);
+    S.comp.t      = clamp(S.comp.t      + rnd(-0.3,0.4),   22, 60);
+    S.comp.flusso = clamp(S.comp.flusso + rnd(-0.3,0.4),   12, 40);
+    S.comp.ia     = clamp(S.comp.ia     + rnd(-0.3,0.4),    4, 22);
+  }
+
+  // ROBOT
+  if(on.robot && r){
+    robotTick++;
+    if(robotTick%6===0){
+      robotIdx=(robotIdx+1)%ROBOT_ROUTE.length;
+      const rr=ROBOT_ROUTE[robotIdx];
+      S.robot.stato=rr.stato; S.robot.dest=rr.dest; S.robot.load=rr.load;
+      if(rr.stato==='IN CARICO') S.robot.miss++;
+    }
+    S.robot.vel = rr_vel();
+    S.robot.bat = clamp(S.robot.bat - 0.005, 20, 100);
+  }
+
+  // PRODUZIONE
+  if(r && Math.random()<0.08){
+    S.completed++; S.cycle++;
+    if(Math.random()<0.08) S.scraps++;
+  }
+
+  render();
+}
+function rr_vel(){return parseFloat(clamp(S.robot.vel+rnd(-0.02,0.03),0,0.32).toFixed(3));}
+
+function setEl(id,v){const e=document.getElementById(id);if(e)e.firstChild.nodeValue=v;}
+
+function alertRow(id, isAlert){
+  const e=document.getElementById(id);
+  if(!e) return;
+  e.className='var-row '+(isAlert?'alert':'ok');
+}
+
+function render(){
+  const on=S.machineOn, r=S.running;
+
+  // clock / uptime
+  document.getElementById('clk').textContent=new Date().toTimeString().slice(0,8);
+  const el=Date.now()-S.startMs;
+  const hh=String(Math.floor(el/3600000)).padStart(2,'0');
+  const mm=String(Math.floor((el%3600000)/60000)).padStart(2,'0');
+  document.getElementById('k6').textContent=hh+':'+mm;
+
+  // KPIs
+  document.getElementById('k1').textContent=S.completed;
+  document.getElementById('k2').textContent=S.scraps;
+  document.getElementById('k2r').textContent=(S.scraps/(S.completed+1)*100).toFixed(1)+'%';
+
+  // Potenza rotore = coppia × velocità angolare
+  const pow = (S.rotore.coppia * S.rotore.vel / 1000).toFixed(2);
+  document.getElementById('k4').textContent=on.rotore&&r ? pow : '—';
+  document.getElementById('v-rot-pow').innerHTML=on.rotore&&r ? pow+'<span class="var-unit">kW</span>' : '—<span class="var-unit">kW</span>';
+  document.getElementById('k5').textContent=on.comp&&r ? S.comp.p.toFixed(2) : '—';
+
+  // Anomalie count
+  let anom=0;
+  if(on.tornio && r && S.tornio.temp>85) anom++;
+  if(on.trapano && S.trapano.amp>15) anom++;
+  if(on.rotore && r && (Math.abs(S.rotore.ax)>1.5||Math.abs(S.rotore.ay)>1.5)) anom++;
+  if(on.comp && r && S.comp.p>8.5) anom++;
+  document.getElementById('k3').textContent=anom;
+
+  // TRAPANO (sempre aggiornato)
+  const trapOk = on.trapano;
+  machineState('trapano', trapOk);
+  if(trapOk){
+    const ampWarn = S.trapano.amp>15;
+    document.getElementById('v-trap-op').innerHTML=S.trapano.op+'<span class="var-unit">'+(S.trapano.op?'presente':'assente')+'</span>';
+    document.getElementById('v-trap-rpm').innerHTML=S.trapano.rpm.toFixed(0)+'<span class="var-unit">RPM</span>';
+    document.getElementById('v-trap-amp').innerHTML=S.trapano.amp.toFixed(2)+'<span class="var-unit">A</span>';
+    document.getElementById('v-trap-stato').innerHTML=S.trapano.stato+'<span class="var-unit">attivo</span>';
+    bar('b-trap-rpm', S.trapano.rpm/1200*100);
+    bar('b-trap-amp', S.trapano.amp/18*100);
+    alertRow('vr-trap-op',  S.trapano.op===0);
+    alertRow('vr-trap-amp', ampWarn);
+  }
+
+  // TORNIO
+  machineState('tornio', on.tornio&&r);
+  if(on.tornio&&r){
+    const tw=S.tornio.temp>85, vw=S.tornio.vib>8;
+    document.getElementById('v-torn-temp').innerHTML=S.tornio.temp.toFixed(1)+'<span class="var-unit">°C</span>';
+    document.getElementById('v-torn-vib').innerHTML=S.tornio.vib.toFixed(2)+'<span class="var-unit">g</span>';
+    document.getElementById('v-torn-rpm').innerHTML=S.tornio.rpm.toFixed(0)+'<span class="var-unit">RPM</span>';
+    document.getElementById('v-torn-stato').innerHTML='1<span class="var-unit">attivo</span>';
+    bar('b-torn-temp', (S.tornio.temp-55)/43*100);
+    bar('b-torn-vib',  S.tornio.vib/12*100);
+    bar('b-torn-rpm',  S.tornio.rpm/2400*100);
+    alertRow('vr-torn-temp', tw);
+    alertRow('vr-torn-vib',  vw);
+    setBadge('st-tornio', tw||vw?'warn':'ok', tw||vw?'ANOMALIA':'OK');
+  }
+
+  // BANCO ROTORE
+  machineState('rotore', on.rotore&&r);
+  if(on.rotore&&r){
+    const aw=Math.abs(S.rotore.ax)>1.5||Math.abs(S.rotore.ay)>1.5;
+    document.getElementById('v-rot-rpm').innerHTML=S.rotore.rpm.toFixed(0)+'<span class="var-unit">RPM</span>';
+    document.getElementById('v-rot-v').innerHTML=S.rotore.v.toFixed(1)+'<span class="var-unit">V</span>';
+    document.getElementById('v-rot-i').innerHTML=S.rotore.i.toFixed(2)+'<span class="var-unit">A</span>';
+    document.getElementById('v-rot-coppia').innerHTML=S.rotore.coppia.toFixed(1)+'<span class="var-unit">N·m</span>';
+    document.getElementById('v-rot-vel').innerHTML=S.rotore.vel.toFixed(2)+'<span class="var-unit">rad/s</span>';
+    document.getElementById('v-rot-ax').innerHTML=S.rotore.ax.toFixed(3)+'<span class="var-unit">m/s²</span>';
+    document.getElementById('v-rot-ay').innerHTML=S.rotore.ay.toFixed(3)+'<span class="var-unit">m/s²</span>';
+    document.getElementById('v-rot-az').innerHTML=S.rotore.az.toFixed(3)+'<span class="var-unit">m/s²</span>';
+    bar('b-rot-rpm',    S.rotore.rpm/3600*100);
+    bar('b-rot-v',      (S.rotore.v-215)/30*100);
+    bar('b-rot-i',      S.rotore.i/28*100);
+    bar('b-rot-coppia', S.rotore.coppia/65*100);
+    bar('b-rot-vel',    S.rotore.vel/(3600*2*Math.PI/60)*100);
+    bar('b-rot-ax',     (S.rotore.ax+2)/4*100);
+    bar('b-rot-ay',     (S.rotore.ay+2)/4*100);
+    bar('b-rot-az',     (S.rotore.az-9)/1.5*100);
+    alertRow('vr-rot-ax', Math.abs(S.rotore.ax)>1.5);
+    alertRow('vr-rot-ay', Math.abs(S.rotore.ay)>1.5);
+    setBadge('st-rotore', aw?'warn':'ok', aw?'ANOMALIA':'OK');
+  }
+
+  // BANCO COMPRESSORE
+  machineState('comp', on.comp&&r);
+  if(on.comp&&r){
+    const pw=S.comp.p>8.5;
+    document.getElementById('v-comp-p').innerHTML=S.comp.p.toFixed(2)+'<span class="var-unit">bar</span>';
+    document.getElementById('v-comp-tf').innerHTML=S.comp.tf.toFixed(1)+'<span class="var-unit">°C</span>';
+    document.getElementById('v-comp-t').innerHTML=S.comp.t.toFixed(1)+'<span class="var-unit">°C</span>';
+    document.getElementById('v-comp-f').innerHTML=S.comp.flusso.toFixed(1)+'<span class="var-unit">m³/h</span>';
+    document.getElementById('v-comp-ia').innerHTML=S.comp.ia.toFixed(2)+'<span class="var-unit">A</span>';
+    document.getElementById('v-comp-stato').innerHTML='1<span class="var-unit">attivo</span>';
+    bar('b-comp-p',  (S.comp.p-5.5)/3.5*100);
+    bar('b-comp-tf', (S.comp.tf-18)/37*100);
+    bar('b-comp-t',  (S.comp.t-22)/38*100);
+    bar('b-comp-f',  (S.comp.flusso-12)/28*100);
+    bar('b-comp-ia', S.comp.ia/22*100);
+    alertRow('vr-comp-p', pw);
+    setBadge('st-comp', pw?'warn':'ok', pw?'ANOMALIA':'OK');
+  }
+
+  // ROBOT
+  machineState('robot', on.robot&&r);
+  if(on.robot&&r){
+    document.getElementById('v-rob-stato').innerHTML=S.robot.stato+'<span class="var-unit"></span>';
+    document.getElementById('v-rob-dest').textContent=S.robot.dest;
+    document.getElementById('v-rob-load').innerHTML=S.robot.load+'<span class="var-unit">'+(S.robot.load?'pezzo':'vuoto')+'</span>';
+    document.getElementById('v-rob-miss').innerHTML=S.robot.miss+'<span class="var-unit"></span>';
+    document.getElementById('v-rob-vel').innerHTML=S.robot.vel.toFixed(3)+'<span class="var-unit">m/s</span>';
+    document.getElementById('v-rob-bat').innerHTML=S.robot.bat.toFixed(1)+'<span class="var-unit">%</span>';
+    bar('b-rob-vel', S.robot.vel/0.32*100);
+    bar('b-rob-bat', S.robot.bat);
+    setBadge('st-robot', S.robot.stato==='FERMO'?'idle':'run', S.robot.stato);
+    const rb=document.getElementById('badge-robot');
+    if(rb) rb.lastChild.nodeValue=' '+S.robot.stato;
+  }
+
+  // STAZIONE stati
+  setBadge('st-sistema', r?'ok':'stop', r?'ONLINE':'OFFLINE');
+  setBadge('st-prod', r?'run':'stop', r?'IN CORSO':'FERMA');
+  setBadge('st-trapano', on.trapano?'ok':'stop', on.trapano?'OK':'STOP');
+  setBadge('st-tornio',  on.tornio&&r?'ok':'stop',  on.tornio&&r?'OK':'STOP');
+  setBadge('st-rotore',  on.rotore&&r?'ok':'stop',  on.rotore&&r?'OK':'STOP');
+  setBadge('st-comp',    on.comp&&r?'ok':'stop',    on.comp&&r?'OK':'STOP');
+  setBadge('st-robot',   on.robot&&r?'run':'stop',  on.robot&&r?S.robot.stato:'STOP');
+  setBadge('st-cqopt',   'ok','PASS');
+  setBadge('st-cqpres',  Math.random()<0.3?'ok':'warn', Math.random()<0.3?'PASS':'WAIT');
+  setBadge('st-asm',     'run','IN CORSO');
+}
+
+function bar(id,pct){
+  const e=document.getElementById(id);
+  if(e) e.style.width=Math.max(0,Math.min(100,pct)).toFixed(1)+'%';
+}
+
+function machineState(name, active){
+  const dot   = document.getElementById('dot-'+name);
+  const badge = document.getElementById('badge-'+name);
+  const panel = document.getElementById('m-'+name);
+  if(dot){
+    dot.className='mach-dot '+(active?'run':'stop');
+  }
+  if(panel) panel.style.opacity=active?'1':'0.45';
+}
+
+function setBadge(id, type, text){
+  const e=document.getElementById(id);
+  if(!e) return;
+  e.className='stato-badge '+type;
+  e.textContent=text;
+}
+
+// LOGS
+const LOGMSGS=[
+  {t:'ok',  m:'Pezzo #48 → CQ ottico: PASS',             tag:'CQ'},
+  {t:'info',m:'Robot rover: carico prelevato da PRELIEVO',tag:'ROBOT'},
+  {t:'warn',m:'Tornio: temperatura alta rilevata',        tag:'SENSORE'},
+  {t:'ok',  m:'Ciclo completato con successo',            tag:'SISTEMA'},
+  {t:'warn',m:'Compressore: pressione vicina alla soglia',tag:'COMP'},
+  {t:'ok',  m:'Banco rotore: parametri nominali',         tag:'ROTORE'},
+  {t:'info',m:'Stazione principale: heartbeat OK',        tag:'SISTEMA'},
+  {t:'warn',m:'Trapano: assorbimento elevato',            tag:'TRAPANO'},
+];
+let logI=0;
+function addLog(t,m,tag){
+  const now=new Date().toTimeString().slice(0,8);
+  S.logs.unshift({t,m,tag,time:now});
+  if(S.logs.length>12) S.logs.pop();
+  const strip=document.getElementById('logStrip');
+  if(!strip) return;
+  strip.innerHTML=S.logs.map(l=>`<div class="log-entry-s ${l.t}"><span class="log-time-s">${l.time}</span><span>[${l.tag}]</span><span>${l.m}</span></div>`).join('');
+}
+setInterval(()=>{
+  const l=LOGMSGS[logI%LOGMSGS.length]; logI++;
+  addLog(l.t,l.m,l.tag);
+},3500);
+LOGMSGS.slice(0,4).forEach((l,i)=>setTimeout(()=>addLog(l.t,l.m,l.tag),i*200));
+
+// CONTROLS
+function stopAll(){
+  S.running=false;
+  Object.keys(S.machineOn).forEach(k=>S.machineOn[k]=false);
+  S.machineOn.trapano=true;
+  document.getElementById('flowDot').style.color='var(--danger)';
+  document.getElementById('flowLbl').textContent='SISTEMA FERMO';
+  addLog('warn','Stop completo sistema — solo trapano attivo','SISTEMA');
+}
+function startAll(){
+  S.running=true;
+  Object.keys(S.machineOn).forEach(k=>S.machineOn[k]=true);
+  document.getElementById('flowDot').style.color='var(--c3)';
+  document.getElementById('flowLbl').textContent='PRODUZIONE IN CORSO';
+  addLog('ok','Sistema avviato — tutte le macchine attive','SISTEMA');
+}
+function stopExceptTrapano(){
+  S.running=false;
+  Object.keys(S.machineOn).forEach(k=>S.machineOn[k]=false);
+  S.machineOn.trapano=true;
+  document.getElementById('flowDot').style.color='var(--c4)';
+  document.getElementById('flowLbl').textContent='STOP — solo trapano (luce) attivo';
+  addLog('warn','Stop selettivo: trapano rimane in funzione (solo luce)','SISTEMA');
+}
+
+// INIT + tick
+S.trapano.rpm=850; S.trapano.amp=8.5;
+S.tornio.temp=72; S.tornio.vib=3.2; S.tornio.rpm=1200;
+S.rotore.rpm=2200; S.rotore.v=230; S.rotore.i=14; S.rotore.coppia=32; S.rotore.vel=230.38;
+S.rotore.ax=0.12; S.rotore.ay=-0.08; S.rotore.az=9.81;
+S.comp.p=7.2; S.comp.tf=32; S.comp.t=28; S.comp.flusso=24; S.comp.ia=12;
+S.robot.vel=0.18; S.robot.bat=85;
+
+render();
+setInterval(tick,1500);
+setInterval(()=>document.getElementById('cycleN').textContent=S.cycle,5000);
+</script>
