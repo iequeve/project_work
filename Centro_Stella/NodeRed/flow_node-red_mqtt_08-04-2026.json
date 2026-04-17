@@ -20,7 +20,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 130,
+        "x": 170,
         "y": 100,
         "wires": [
             [
@@ -32,9 +32,9 @@
         "id": "a83599abc4ccdc27",
         "type": "comment",
         "z": "f56298adf0acbb66",
-        "name": "MQTT SUBSCRIBER al topic \"trapano/telemetria\"",
+        "name": "MQTT SUBSCRIBER al topic */telemetria",
         "info": "",
-        "x": 220,
+        "x": 200,
         "y": 60,
         "wires": []
     },
@@ -42,16 +42,283 @@
         "id": "700a6deeb57801e3",
         "type": "debug",
         "z": "f56298adf0acbb66",
-        "name": "debug 13",
+        "name": "debug 1",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 300,
+        "x": 420,
         "y": 100,
+        "wires": []
+    },
+    {
+        "id": "1dc2694fd954e2c0",
+        "type": "mqtt in",
+        "z": "f56298adf0acbb66",
+        "name": "",
+        "topic": "pressione/telemetria",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "01602b78d1c52aa5",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 240,
+        "wires": [
+            [
+                "edf28bdf44121371"
+            ]
+        ]
+    },
+    {
+        "id": "7b2262d6f1c1f9d4",
+        "type": "mqtt in",
+        "z": "f56298adf0acbb66",
+        "name": "",
+        "topic": "tornio/telemetria",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "01602b78d1c52aa5",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 500,
+        "wires": [
+            [
+                "a53e3c46c6722ff1"
+            ]
+        ]
+    },
+    {
+        "id": "357c7671e2a85640",
+        "type": "mqtt in",
+        "z": "f56298adf0acbb66",
+        "name": "",
+        "topic": "pedana_tornio/telemetria",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "01602b78d1c52aa5",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 560,
+        "wires": [
+            [
+                "065ef49db95ee8ca"
+            ]
+        ]
+    },
+    {
+        "id": "f9e4cdd517e26ff9",
+        "type": "mqtt in",
+        "z": "f56298adf0acbb66",
+        "name": "",
+        "topic": "robot/telemetria",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "01602b78d1c52aa5",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 380,
+        "wires": [
+            [
+                "67be907b7928808d"
+            ]
+        ]
+    },
+    {
+        "id": "e2a1a9588a7b8c81",
+        "type": "mqtt in",
+        "z": "f56298adf0acbb66",
+        "name": "",
+        "topic": "pedana_pressione/telemetria",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "01602b78d1c52aa5",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 300,
+        "wires": [
+            [
+                "c7469e8492212372"
+            ]
+        ]
+    },
+    {
+        "id": "564fbce721d1eb69",
+        "type": "mqtt in",
+        "z": "f56298adf0acbb66",
+        "name": "",
+        "topic": "pedana_trapano/telemetria",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "01602b78d1c52aa5",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "a1d9549aac106006"
+            ]
+        ]
+    },
+    {
+        "id": "1a1da23423b03144",
+        "type": "mqtt in",
+        "z": "f56298adf0acbb66",
+        "name": "",
+        "topic": "pedana_assemblaggio/telemetria",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "01602b78d1c52aa5",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 660,
+        "wires": [
+            [
+                "11bb34da934ad804"
+            ]
+        ]
+    },
+    {
+        "id": "a1d9549aac106006",
+        "type": "debug",
+        "z": "f56298adf0acbb66",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "edf28bdf44121371",
+        "type": "debug",
+        "z": "f56298adf0acbb66",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "c7469e8492212372",
+        "type": "debug",
+        "z": "f56298adf0acbb66",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "67be907b7928808d",
+        "type": "debug",
+        "z": "f56298adf0acbb66",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "a53e3c46c6722ff1",
+        "type": "debug",
+        "z": "f56298adf0acbb66",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "065ef49db95ee8ca",
+        "type": "debug",
+        "z": "f56298adf0acbb66",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "11bb34da934ad804",
+        "type": "debug",
+        "z": "f56298adf0acbb66",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 660,
         "wires": []
     },
     {
