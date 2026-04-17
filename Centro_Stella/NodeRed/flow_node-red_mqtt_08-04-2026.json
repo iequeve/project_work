@@ -2,7 +2,7 @@
     {
         "id": "f56298adf0acbb66",
         "type": "tab",
-        "label": "Flow 2",
+        "label": "Flow 1",
         "disabled": false,
         "info": "",
         "env": []
@@ -21,10 +21,10 @@
         "rh": 0,
         "inputs": 0,
         "x": 170,
-        "y": 100,
+        "y": 180,
         "wires": [
             [
-                "700a6deeb57801e3"
+                "1707275490d90163"
             ]
         ]
     },
@@ -35,24 +35,7 @@
         "name": "MQTT SUBSCRIBER al topic */telemetria",
         "info": "",
         "x": 200,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "700a6deeb57801e3",
-        "type": "debug",
-        "z": "f56298adf0acbb66",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 100,
+        "y": 140,
         "wires": []
     },
     {
@@ -69,10 +52,10 @@
         "rh": 0,
         "inputs": 0,
         "x": 170,
-        "y": 240,
+        "y": 320,
         "wires": [
             [
-                "edf28bdf44121371"
+                "39f0eb6bdd773900"
             ]
         ]
     },
@@ -90,10 +73,10 @@
         "rh": 0,
         "inputs": 0,
         "x": 180,
-        "y": 500,
+        "y": 580,
         "wires": [
             [
-                "a53e3c46c6722ff1"
+                "ce97b721691b0713"
             ]
         ]
     },
@@ -111,7 +94,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 150,
-        "y": 560,
+        "y": 640,
         "wires": [
             [
                 "065ef49db95ee8ca"
@@ -132,7 +115,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 180,
-        "y": 380,
+        "y": 460,
         "wires": [
             [
                 "67be907b7928808d"
@@ -153,7 +136,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 140,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "c7469e8492212372"
@@ -174,7 +157,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 150,
-        "y": 160,
+        "y": 240,
         "wires": [
             [
                 "a1d9549aac106006"
@@ -195,7 +178,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 130,
-        "y": 660,
+        "y": 740,
         "wires": [
             [
                 "11bb34da934ad804"
@@ -207,23 +190,6 @@
         "type": "debug",
         "z": "f56298adf0acbb66",
         "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "edf28bdf44121371",
-        "type": "debug",
-        "z": "f56298adf0acbb66",
-        "name": "debug 3",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -250,7 +216,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 420,
-        "y": 300,
+        "y": 380,
         "wires": []
     },
     {
@@ -267,24 +233,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 420,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "a53e3c46c6722ff1",
-        "type": "debug",
-        "z": "f56298adf0acbb66",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 500,
+        "y": 460,
         "wires": []
     },
     {
@@ -301,7 +250,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 420,
-        "y": 560,
+        "y": 640,
         "wires": []
     },
     {
@@ -318,7 +267,121 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 420,
-        "y": 660,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "1707275490d90163",
+        "type": "function",
+        "z": "f56298adf0acbb66",
+        "name": "function 1",
+        "func": "msg.payload = {\n    GiriAlMinuto: msg.payload.GiriAlMinuto,\n    PresenzaOperatore: msg.payload.PresenzaOperatore,\n    AssorbimentoElettrico: msg.payload.AssorbimentoElettrico,\n    Stato: msg.payload.Stato\n};\nmsg.tags = { macchina: \"Trapano\" };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 180,
+        "wires": [
+            [
+                "f8756af24d528870"
+            ]
+        ]
+    },
+    {
+        "id": "39f0eb6bdd773900",
+        "type": "function",
+        "z": "f56298adf0acbb66",
+        "name": "function 2",
+        "func": "msg.payload = {\n    PressioneLinea: msg.payload.PressioneLinea,\n    TempFlussometro: msg.payload.TempFlussometro,\n    TemperaturaAmbiente: msg.payload.TemperaturaAmbiente,\n    Flusso: msg.payload.Flusso,\n    Assorbimenti: msg.payload.Assorbimenti\n};\nmsg.tags = { macchina: \"Pressione\" };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 320,
+        "wires": [
+            [
+                "31d422a49acd7837"
+            ]
+        ]
+    },
+    {
+        "id": "ce97b721691b0713",
+        "type": "function",
+        "z": "f56298adf0acbb66",
+        "name": "function 3",
+        "func": "msg.payload = {\n    GiriAlMinuto: msg.payload.GiriAlMinuto,\n    Tensione: msg.payload.Tensione,\n    Corrente: msg.payload.Corrente,\n    CoppiaAzionamento: msg.payload.CoppiaAzionamento,\n    Velocita: msg.payload.Velocita,\n    PotenzaCalcolata: msg.payload.PotenzaCalcolata,\n    AccelX: msg.payload.AccelX,\n    AccelY: msg.payload.AccelY,\n    AccelZ: msg.payload.AccelZ\n};\nmsg.tags = { macchina: \"Tornio\" };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 580,
+        "wires": [
+            [
+                "c0443b5830ae177f"
+            ]
+        ]
+    },
+    {
+        "id": "f8756af24d528870",
+        "type": "influxdb out",
+        "z": "f56298adf0acbb66",
+        "influxdb": "ed9b57d83781b5a3",
+        "name": "",
+        "measurement": "dati",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "centro stella",
+        "bucket": "dati_prova_1",
+        "x": 780,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "31d422a49acd7837",
+        "type": "influxdb out",
+        "z": "f56298adf0acbb66",
+        "influxdb": "ed9b57d83781b5a3",
+        "name": "",
+        "measurement": "dati",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "centro stella",
+        "bucket": "dati_prova_1",
+        "x": 780,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "c0443b5830ae177f",
+        "type": "influxdb out",
+        "z": "f56298adf0acbb66",
+        "influxdb": "ed9b57d83781b5a3",
+        "name": "",
+        "measurement": "dati",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "centro stella",
+        "bucket": "dati_prova_1",
+        "x": 780,
+        "y": 580,
         "wires": []
     },
     {
@@ -351,5 +414,28 @@
         "willMsg": {},
         "userProps": "",
         "sessionExpiry": ""
+    },
+    {
+        "id": "ed9b57d83781b5a3",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "https://eu-central-1-1.aws.cloud2.influxdata.com/",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "d9f0beea4fc2bdfb",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-influxdb": "0.7.0"
+        }
     }
 ]
