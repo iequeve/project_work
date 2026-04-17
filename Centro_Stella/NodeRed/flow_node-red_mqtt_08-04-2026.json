@@ -275,7 +275,7 @@
         "type": "function",
         "z": "f56298adf0acbb66",
         "name": "function 1",
-        "func": "msg.payload = {\n    GiriAlMinuto: msg.payload.GiriAlMinuto,\n    PresenzaOperatore: msg.payload.PresenzaOperatore,\n    AssorbimentoElettrico: msg.payload.AssorbimentoElettrico,\n    Stato: msg.payload.Stato\n};\nmsg.tags = { macchina: \"Trapano\" };\nreturn msg;",
+        "func": "msg.payload = [{\n    GiriAlMinuto: msg.payload.GiriAlMinuto,\n    PresenzaOperatore: msg.payload.PresenzaOperatore,\n    AssorbimentoElettrico: msg.payload.AssorbimentoElettrico,\n    Stato: msg.payload.Stato\n},\n{ Macchina: \"Trapano\" }];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -295,7 +295,7 @@
         "type": "function",
         "z": "f56298adf0acbb66",
         "name": "function 2",
-        "func": "msg.payload = {\n    PressioneLinea: msg.payload.PressioneLinea,\n    TempFlussometro: msg.payload.TempFlussometro,\n    TemperaturaAmbiente: msg.payload.TemperaturaAmbiente,\n    Flusso: msg.payload.Flusso,\n    Assorbimenti: msg.payload.Assorbimenti\n};\nmsg.tags = { macchina: \"Pressione\" };\nreturn msg;",
+        "func": "msg.payload = [{\n    PressioneLinea: msg.payload.PressioneLinea,\n    TempFlussometro: msg.payload.TempFlussometro,\n    TemperaturaAmbiente: msg.payload.TemperaturaAmbiente,\n    Flusso: msg.payload.Flusso,\n    Assorbimenti: msg.payload.Assorbimenti\n},\n{ Macchina: \"Pressione\" }];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -315,7 +315,7 @@
         "type": "function",
         "z": "f56298adf0acbb66",
         "name": "function 3",
-        "func": "msg.payload = {\n    GiriAlMinuto: msg.payload.GiriAlMinuto,\n    Tensione: msg.payload.Tensione,\n    Corrente: msg.payload.Corrente,\n    CoppiaAzionamento: msg.payload.CoppiaAzionamento,\n    Velocita: msg.payload.Velocita,\n    PotenzaCalcolata: msg.payload.PotenzaCalcolata,\n    AccelX: msg.payload.AccelX,\n    AccelY: msg.payload.AccelY,\n    AccelZ: msg.payload.AccelZ\n};\nmsg.tags = { macchina: \"Tornio\" };\nreturn msg;",
+        "func": "msg.payload = [{\n    GiriAlMinuto: msg.payload.GiriAlMinuto,\n    Tensione: msg.payload.Tensione,\n    Corrente: msg.payload.Corrente,\n    CoppiaAzionamento: msg.payload.CoppiaAzionamento,\n    Velocita: msg.payload.Velocita,\n    PotenzaCalcolata: msg.payload.PotenzaCalcolata,\n    AccelX: msg.payload.AccelX,\n    AccelY: msg.payload.AccelY,\n    AccelZ: msg.payload.AccelZ\n},\n{ Macchina: \"Tornio\" }];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -431,7 +431,7 @@
         "rejectUnauthorized": true
     },
     {
-        "id": "d9f0beea4fc2bdfb",
+        "id": "a6a09662877f79db",
         "type": "global-config",
         "env": [],
         "modules": {
