@@ -1,52 +1,118 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
-using System.Text.Json; // Necessario per il JSON
+using System.Text.Json;
 using System.Text;
+using System.Collections.Generic;
+using System.IO;
+using TwinCAT.Ads; // Libreria ufficiale Beckhoff
 
-var mqttFactory = new MqttFactory();
+// Variabili di configurazione
+string addressMqttBroker;
+int portMqtt = 0;
+string topicMqtt;
+// Configurazione ADS
+string amsNetId;
+int portAds = 0;
+//array delle variabili da erichiedere al PLC
+string[] variablesArray;
 
-using (var mqttClient = mqttFactory.CreateMqttClient())
+
+
+
+//funzione diu estrazione della configurazione dal file json
+void InizializzaConfigurazione(string filePath)
 {
-    // --- CONFIGURAZIONE CONNESSIONE ---
-    // Sostituirai "INSERISCI_IP_QUI" con l'IP che mi darai
-    var mqttClientOptions = new MqttClientOptionsBuilder()
-    .WithTcpServer("localhost", 1883) // Ora punta al tuo PC
-    .Build();
-
-    try 
+    string jsonString = File.ReadAllText(filePath);
+    using (JsonDocument doc = JsonDocument.Parse(jsonString))
     {
-        await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-        Console.WriteLine("Connesso al server MQTT di Node-RED!");
+        JsonElement root = doc.RootElement;
 
-        // --- PREPARAZIONE DATI ---
-        // Qui simuliamo i dati che poi acquisirai dal trapano
-        var datiTrapano = new
+        // Configurazione MQTT, da warning perché teme di avere variabili nulle
+        JsonElement mqttConfig = root.GetProperty("mqtt_config");
+        addressMqttBroker = mqttConfig.GetProperty("address_mqttBroker").GetString();
+        portMqtt = mqttConfig.GetProperty("port_mqtt").GetInt32();
+        topicMqtt = mqttConfig.GetProperty("topic_mqtt").GetString();
+
+        // Configurazione PLC Beckhoff (ADS), da warning perché teme di avere variabili nulle
+        JsonElement plcConfig = root.GetProperty("plc_config");
+        amsNetId = plcConfig.GetProperty("ams_netId").GetString(); // Es: "192.168.1.10.1.1"
+        portAds = plcConfig.GetProperty("port_ads").GetInt32();     // Di solito 851 per TwinCAT 3
+
+        // Estrazione lista variabili
+        List<string> listaTemporanea = new List<string>();
+        foreach (JsonElement v in root.GetProperty("variables").EnumerateArray())
         {
-            PresenzaOperatore = true,      // bool
-            StatoMacchina = true,         // bool
-            GiriAlMinuto = 1250.5,        // double
-            AssorbimentoElettrico = 4.2   // double
-        };
+            listaTemporanea.Add(v.GetString());
+        }
+        variablesArray = listaTemporanea.ToArray();
+    }
+}
 
-        // Serializziamo l'oggetto in una stringa JSON
-        string jsonPayload = JsonSerializer.Serialize(datiTrapano);
 
-        // --- INVIO DATI ---
+
+
+//parte principale del programma
+try
+{
+    InizializzaConfigurazione("conf.json");
+
+    var datiLettiDalPlc = new Dictionary<string, object>();
+
+    // Connessione ADS
+    using (AdsClient adsClient = new AdsClient())
+    {
+        Console.WriteLine($"Connessione ADS a {amsNetId}:{portAds}...");
+        adsClient.Connect(amsNetId, portAds);
+
+        foreach (var varName in variablesArray)
+        {
+            try
+            {
+                // Lettura dinamica: assumiamo siano variabili di tipo INT (short) o DINT (int)
+                // Usiamo ReadValue per leggere direttamente tramite il nome della variabile
+                var valore = adsClient.ReadValue(varName, typeof(int)); 
+                datiLettiDalPlc.Add(varName, valore);
+                Console.WriteLine($"Letta variabile {varName}: {valore}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Errore nella lettura di {varName}: {ex.Message}");
+            }
+        }
+        adsClient.Disconnect();
+    }
+
+    //invio dei dati tramite MQTT
+    var mqttFactory = new MqttFactory();
+    using (var mqttClient = mqttFactory.CreateMqttClient())
+    {
+        var mqttClientOptions = new MqttClientOptionsBuilder()
+            .WithTcpServer(addressMqttBroker, portMqtt)
+            .Build();
+
+        await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+
+        string jsonPayload = JsonSerializer.Serialize(datiLettiDalPlc);
+
         var message = new MqttApplicationMessageBuilder()
-            .WithTopic("trapano/telemetria")
+            .WithTopic(topicMqtt)
             .WithPayload(jsonPayload)
             .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce)
             .Build();
 
+
+        //stampa di debug del mesaggio dati
+        Console.WriteLine($"Invio a MQTT: {jsonPayload}");
+
+
+
         await mqttClient.PublishAsync(message, CancellationToken.None);
+        Console.WriteLine($"Inviato a MQTT: {jsonPayload}");
 
-        Console.WriteLine($"Dati inviati a Node-RED: {jsonPayload}");
-
-        // Disconnessione pulita
         await mqttClient.DisconnectAsync();
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Errore: {ex.Message}");
-    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Errore critico: {ex.Message}");
 }

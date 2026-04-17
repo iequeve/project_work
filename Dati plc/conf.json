@@ -1,0 +1,15 @@
+{
+  "plc_config": {
+    "ams_netId": "5.132.156.75.1.1",
+    "port_ads": 851
+  },
+  "mqtt_config": {
+    "address_mqttBroker": "127.0.0.1",
+    "port_mqtt": 1883,
+    "topic_mqtt": "trapano/telemetria"
+  },
+  "variables": [
+    "GVL_DataLogger.di1",
+    "GVL_DataLogger.di2"
+  ]
+}
