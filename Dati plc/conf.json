@@ -1,4 +1,5 @@
 {
+  "cycle_time_ms": 5000,
   "plc_config": {
     "ams_netId": "5.132.156.75.1.1",
     "port_ads": 851
@@ -9,7 +10,29 @@
     "topic_mqtt": "trapano/telemetria"
   },
   "variables": [
-    "GVL_DataLogger.di1",
-    "GVL_DataLogger.di2"
+    {
+      "name": "GVL_DataLogger.di1",
+      "isArray": false
+    },
+    {
+      "name": "GVL_DataLogger.di2",
+      "isArray": false
+    },
+    {
+      "name": "GVL_DataLogger.di3",
+      "isArray": false
+    },
+    {
+      "name": "GVL_DataLogger.rpm",
+      "isArray": false
+    },
+    {
+      "name": "GVL_DataLogger.weight",
+      "isArray": true
+    },
+    {
+      "name": "GVL_DataLogger.position",
+      "isArray": true
+    }
   ]
 }

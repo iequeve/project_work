@@ -1,0 +1,104 @@
+PROGRAM pRPM
+VAR
+    // === Configurazione ===
+    pulsesPerRevolution : UINT  := 1;
+    measurementWindowMs : LREAL := 1000.0;   // finestra di misura
+
+    // === Buffer ===
+    bCurrentState    : ARRAY [0..9] OF BOOL;
+    bLastSampleState : BOOL := FALSE;
+
+    // === Conteggio ===
+    edgeCount      : UDINT := 0;
+    totalEdgeCount : UDINT := 0;
+
+    // === Tempo reale ===
+    tStart : LREAL := 0.0;
+    tNow   : LREAL := 0.0;
+    dcTime : ULINT;
+
+    // === Risultati ===
+    frequencyHz : LREAL := 0.0;
+
+    // === Var interne ===
+    i : INT;
+    bFirstCycle : BOOL := TRUE;
+END_VAR
+
+
+// ==========================
+// 1) Conversione analogico → digitale (con soglia)
+// ==========================
+FOR i := 0 TO 9 DO
+    bCurrentState[i] := GVL_DataLogger.speed[i] >= 0.5;
+END_FOR
+
+
+// ==========================
+// 2) Conteggio fronti di salita
+// ==========================
+edgeCount := 0;
+
+// continuità tra cicli
+IF (NOT bLastSampleState) AND bCurrentState[0] THEN
+    edgeCount := edgeCount + 1;
+END_IF
+
+// fronti interni al buffer
+FOR i := 1 TO 9 DO
+    IF (NOT bCurrentState[i-1]) AND bCurrentState[i] THEN
+        edgeCount := edgeCount + 1;
+    END_IF
+END_FOR
+
+// aggiorna stato
+bLastSampleState := bCurrentState[9];
+
+
+// ==========================
+// 3) Accumulo fronti
+// ==========================
+totalEdgeCount := totalEdgeCount + edgeCount;
+
+
+// ==========================
+// 4) Tempo reale (Distributed Clock)
+// ==========================
+dcTime := F_GetCurDcTickTime64();   // ns
+tNow   := ULINT_TO_LREAL(dcTime) / 1000000.0; // ms
+
+
+// inizializzazione
+IF bFirstCycle THEN
+    tStart := tNow;
+    bFirstCycle := FALSE;
+END_IF
+
+
+// ==========================
+// 5) Calcolo frequenza
+// ==========================
+IF (tNow - tStart) >= measurementWindowMs THEN
+
+    IF (tNow - tStart) > 0.0 THEN
+        frequencyHz := UDINT_TO_LREAL(totalEdgeCount) * 1000.0 / (tNow - tStart);
+    ELSE
+        frequencyHz := 0.0;
+    END_IF
+
+    // reset finestra
+    totalEdgeCount := 0;
+    tStart := tNow;
+END_IF
+
+
+// ==========================
+// 6) Calcolo RPM
+// ==========================
+IF pulsesPerRevolution > 0 THEN
+    GVL_DataLogger.rpm := LREAL_TO_REAL(
+        frequencyHz * 60.0 / UINT_TO_LREAL(pulsesPerRevolution)
+    );
+ELSE
+    GVL_DataLogger.rpm := 0.0;
+END_IF
