@@ -1,0 +1,4 @@
+I FILE DI CONFIGURAZIONE DEVONO ESSERE CHIAMATI "conf.json" E MESSI NELLA CARTELLA "EstrazioneDatiADS/bin/debug/net6.0".
+
+
+se non falirà nel leggerlo. Deve esserer la stessa cartella dell'eseguibile .exe
